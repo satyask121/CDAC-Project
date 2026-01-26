@@ -2,6 +2,8 @@ package com.restaurant.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -39,9 +41,10 @@ public class Order {
 	
 	private Double totalAmount;
 	
-	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	@CreationTimestamp
 	private LocalDateTime createdAt;
 }

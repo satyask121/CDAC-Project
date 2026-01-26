@@ -122,7 +122,10 @@ public class FoodItemServiceImpl implements FoodItemService {
 	                .orElseThrow(() ->
 	                        new ResourceNotFoundException("Food item not found with id : " + id));
 
-	        foodItemRepository.delete(foodItem);
+//Soft Delete
+	        foodItem.setIsAvailable(false);
+	        foodItemRepository.save(foodItem);
+
 	    }
 
 }

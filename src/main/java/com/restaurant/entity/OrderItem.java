@@ -37,7 +37,7 @@ public class OrderItem {
 	
 	private Double unitPrice;
 	
-	private Double subtotal;
+	private Double subTotal;
 	
 	
 }

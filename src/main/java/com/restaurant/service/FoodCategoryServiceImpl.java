@@ -75,6 +75,8 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Food category not found with id : " + id));
 
-        categoryRepository.delete(category);
+        category.setIsActive(false);   // soft delete
+        categoryRepository.save(category);
+
     }
 }

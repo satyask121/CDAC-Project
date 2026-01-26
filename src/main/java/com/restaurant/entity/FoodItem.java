@@ -2,6 +2,9 @@ package com.restaurant.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,14 +45,16 @@ public class FoodItem {
 	private Boolean isAvailable;
 
 	@Column(nullable = false)
-	private String imageUrl;
+	private String imageurl;
 
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private FoodCategory category;
 
+	@CreationTimestamp
 	private LocalDateTime createdAt;
 
+	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 
 }

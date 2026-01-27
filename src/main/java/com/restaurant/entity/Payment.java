@@ -2,19 +2,10 @@ package com.restaurant.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "payments")
@@ -22,24 +13,28 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Payment {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "order_id")
-	private Order order;
+    // One payment belongs to exactly one order
+    @OneToOne(optional = false)
+    @JoinColumn(name = "order_id", nullable = false, unique = true)
+    private Order order;
 
-	private Double amount;
+    private Double amount;
 
-	@Enumerated(EnumType.STRING)
-	private PaymentMethod paymentMethod;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
 
-	private String status;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
 
-	private String transactionReference;
-	private LocalDateTime paidAt;
+    // External reference like UPI / gateway txn id
+    private String transactionReference;
+
+    @CreationTimestamp
+    private LocalDateTime paidAt;
 }

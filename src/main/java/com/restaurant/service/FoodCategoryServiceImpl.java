@@ -12,19 +12,17 @@ import com.restaurant.entity.FoodCategory;
 import com.restaurant.exception.ResourceNotFoundException;
 import com.restaurant.repository.FoodCategoryRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
 @Transactional
+@AllArgsConstructor
 public class FoodCategoryServiceImpl implements FoodCategoryService {
 
     private final FoodCategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
-    public FoodCategoryServiceImpl(
-            FoodCategoryRepository categoryRepository,
-            ModelMapper modelMapper) {
-        this.categoryRepository = categoryRepository;
-        this.modelMapper = modelMapper;
-    }
+   
 
     @Override
     public FoodCategoryDto createCategory(FoodCategoryDto categoryDto) {

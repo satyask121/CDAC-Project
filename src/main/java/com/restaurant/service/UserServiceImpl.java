@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.restaurant.dto.UserDto;
+import com.restaurant.dto.UserRegisterDto;
+import com.restaurant.entity.Role;
 import com.restaurant.entity.User;
 import com.restaurant.repository.UserRepository;
 
@@ -22,16 +25,30 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	
 	private final ModelMapper mapper;
+	private final PasswordEncoder passwordEncoder;
 	
-	@Override
-	public UserDto registerUser(UserDto userDto) {
-	User user = mapper.map(userDto, User.class);
-	user.setCreatedAt(LocalDateTime.now());
-	
-	User saveUser = userRepository.save(user);
-	return mapper.map(saveUser, UserDto.class);
-		
-	}
+	 @Override
+	    public UserDto registerUser(UserRegisterDto userDto) {
+
+	        if (userRepository.existsByEmail(userDto.getEmail())) {
+	            throw new RuntimeException("Email already exists");
+	        }
+
+	        User user = new User();
+	        user.setName(userDto.getName());
+	        user.setEmail(userDto.getEmail());
+
+	        // BCrypt password
+	        user.setPasswordHash(
+	                passwordEncoder.encode(userDto.getPassword())
+	        );
+
+	        user.setRole(Role.CUSTOMER);
+	        user.setCreatedAt(LocalDateTime.now());
+
+	        User savedUser = userRepository.save(user);
+	        return mapper.map(savedUser, UserDto.class);
+	    }
 
 	@Override
 	public UserDto getUserById(Long id) {
@@ -57,6 +74,28 @@ public class UserServiceImpl implements UserService {
 				.map(user-> mapper.map(user, UserDto.class))
 				.collect(Collectors.toList());
 	}
-	
+
+	  @Override
+	    public UserDto registerAdmin(UserRegisterDto userDto) {
+
+	        if (userRepository.existsByEmail(userDto.getEmail())) {
+	            throw new RuntimeException("Email already exists");
+	        }
+
+	        User user = new User();
+	        user.setName(userDto.getName());
+	        user.setEmail(userDto.getEmail());
+
+	        // 🔐 BCrypt password
+	        user.setPasswordHash(
+	                passwordEncoder.encode(userDto.getPassword())
+	        );
+
+	        user.setRole(Role.ADMIN);
+	        user.setCreatedAt(LocalDateTime.now());
+
+	        User savedUser = userRepository.save(user);
+	        return mapper.map(savedUser, UserDto.class);
+	    }
 
 }

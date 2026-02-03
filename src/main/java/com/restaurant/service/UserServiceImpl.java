@@ -37,7 +37,8 @@ public class UserServiceImpl implements UserService {
 	        User user = new User();
 	        user.setName(userDto.getName());
 	        user.setEmail(userDto.getEmail());
-
+	        user.setPhone(userDto.getPhone());
+	        
 	        // BCrypt password
 	        user.setPasswordHash(
 	                passwordEncoder.encode(userDto.getPassword())
@@ -85,13 +86,38 @@ public class UserServiceImpl implements UserService {
 	        User user = new User();
 	        user.setName(userDto.getName());
 	        user.setEmail(userDto.getEmail());
+	        user.setPhone(userDto.getPhone());
 
-	        // 🔐 BCrypt password
+	        // BCrypt password
 	        user.setPasswordHash(
 	                passwordEncoder.encode(userDto.getPassword())
 	        );
 
 	        user.setRole(Role.ADMIN);
+	        user.setCreatedAt(LocalDateTime.now());
+
+	        User savedUser = userRepository.save(user);
+	        return mapper.map(savedUser, UserDto.class);
+	    }
+	  
+	  @Override
+	    public UserDto registerStaff(UserRegisterDto userDto) {
+
+	        if (userRepository.existsByEmail(userDto.getEmail())) {
+	            throw new RuntimeException("Email already exists");
+	        }
+
+	        User user = new User();
+	        user.setName(userDto.getName());
+	        user.setEmail(userDto.getEmail());
+	        user.setPhone(userDto.getPhone());
+
+	        // BCrypt password
+	        user.setPasswordHash(
+	                passwordEncoder.encode(userDto.getPassword())
+	        );
+
+	        user.setRole(Role.STAFF);
 	        user.setCreatedAt(LocalDateTime.now());
 
 	        User savedUser = userRepository.save(user);

@@ -1,10 +1,8 @@
 package com.restaurant.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +16,6 @@ import com.restaurant.entity.OrderItem;
 import com.restaurant.entity.OrderStatus;
 import com.restaurant.entity.User;
 import com.restaurant.exception.ResourceNotFoundException;
-import com.restaurant.repository.CustomerRepository;
 import com.restaurant.repository.FoodItemRepository;
 import com.restaurant.repository.OrderItemRepository;
 import com.restaurant.repository.OrderRepository;
@@ -110,6 +107,14 @@ public class OrderServiceImpl implements OrderService {
 		return orderRepository.findByUserId(userId).stream().map(order -> getOrderById(order.getId()))
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<OrderResponseDto> getAllOrders() {
+		// Reuse getOrderById to build full response with items
+		return orderRepository.findAll().stream()
+				.map(order -> getOrderById(order.getId()))
+				.collect(Collectors.toList());
+	}
 
 	@Override
 	public OrderResponseDto updateOrderStatus(Long orderId, OrderStatus status) {
@@ -121,5 +126,5 @@ public class OrderServiceImpl implements OrderService {
 
 		return getOrderById(orderId);
 	}
-
+	
 }

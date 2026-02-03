@@ -3,6 +3,7 @@ package com.restaurant.controller;
 import java.util.List;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +14,12 @@ import com.restaurant.service.FoodCategoryService;
 
 @RestController
 @RequestMapping("/api/categories")
+@AllArgsConstructor
 public class FoodCategoryController {
 
     private final FoodCategoryService categoryService;
 
-    public FoodCategoryController(FoodCategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
+   
     // Create category
     @PostMapping
     public ResponseEntity<FoodCategoryDto> createCategory(

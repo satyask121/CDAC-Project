@@ -32,6 +32,12 @@ public class OrderController {
 		return new ResponseEntity<>(orderService.createOrder(dto), HttpStatus.CREATED);
 	}
 	
+	// get all orders (for staff/admin dashboard)
+		@GetMapping
+		public ResponseEntity<?> getAllOrders() {
+			return ResponseEntity.ok(orderService.getAllOrders());
+		}
+		
 	// get order by id
 	 @GetMapping("/{orderId}")
 	

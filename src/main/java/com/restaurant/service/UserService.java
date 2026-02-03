@@ -17,4 +17,5 @@ public interface UserService {
 	
 	 UserDto registerAdmin(UserRegisterDto userDto);
     
+	 UserDto registerStaff(UserRegisterDto dto);
 }
